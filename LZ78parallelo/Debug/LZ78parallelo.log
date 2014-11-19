@@ -1,0 +1,13 @@
+﻿Compilazione avviata 18/11/2014 09:34:12.
+     1>Progetto "D:\LZ78parallelo\LZ78parallelo.vcxproj" sul nodo 2 (destinazioni: Build).
+     1>ClCompile:
+         D:\APPLICAZIONI\VisualStudio\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt seriale.cpp
+         seriale.cpp
+       Link:
+         D:\APPLICAZIONI\VisualStudio\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\LZ78parallelo\Debug\LZ78parallelo.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\LZ78parallelo\Debug\LZ78parallelo.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\LZ78parallelo\Debug\LZ78parallelo.lib" /MACHINE:X86 Debug\seriale.obj
+         LZ78parallelo.vcxproj -> D:\LZ78parallelo\Debug\LZ78parallelo.exe
+     1>Compilazione progetto "D:\LZ78parallelo\LZ78parallelo.vcxproj" (destinazioni: Build) completata.
+
+Compilazione completata.
+
+Tempo trascorso 00:00:01.62

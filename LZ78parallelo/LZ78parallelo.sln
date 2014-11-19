@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2013 for Windows Desktop
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LZ78parallelo", "LZ78parallelo.vcxproj", "{B021384B-90AB-4577-AF4F-6180EE423C92}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LZ78parallelo", "LZ78parallelo.vcxproj", "{1349D29C-F804-41A9-988B-71BFD4B6E280}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B021384B-90AB-4577-AF4F-6180EE423C92}.Debug|Win32.ActiveCfg = Debug|Win32
-		{B021384B-90AB-4577-AF4F-6180EE423C92}.Debug|Win32.Build.0 = Debug|Win32
-		{B021384B-90AB-4577-AF4F-6180EE423C92}.Release|Win32.ActiveCfg = Release|Win32
-		{B021384B-90AB-4577-AF4F-6180EE423C92}.Release|Win32.Build.0 = Release|Win32
+		{1349D29C-F804-41A9-988B-71BFD4B6E280}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1349D29C-F804-41A9-988B-71BFD4B6E280}.Debug|Win32.Build.0 = Debug|Win32
+		{1349D29C-F804-41A9-988B-71BFD4B6E280}.Release|Win32.ActiveCfg = Release|Win32
+		{1349D29C-F804-41A9-988B-71BFD4B6E280}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
