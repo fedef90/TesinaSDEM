@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 {
 	double tempo;
 	clock_t start, end;
-	const unsigned maxbits = 10;
+	const unsigned maxbits = 8;
 	const unsigned numproc = 1;
 
 	start = clock();
