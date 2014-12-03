@@ -3,6 +3,30 @@
 #include <time.h>
 #include <sys/stat.h>
 
+/**@mainpage <center> Compressore LZ78 Parallelo </center>
+*
+* Questo programma implementa la compressione di un file attraverso l'algoritmo LZ78 e la relativa 
+* decompressione, parallelizzando il calcolo su pi&ugrave; processori.
+*
+* @authors Marcella Cornia
+* @authors Federica Fergnani
+* @authors Riccardo Gasparini
+*/
+
+/** Funzione main.
+*
+* Gli argomenti passati da linea di comando devono essere:
+* - "ENC" o "DEC" rispettivamente per codifica e decodifica
+* - nome del file di input
+* - nome del file di output
+*
+* La funzione crea un oggetto della classe LZ78Encode o un oggetto della classe LZ78Decode a seconda  che il primo
+* argomento passato sia "ENC" o "DEC" e chiama la relativa funzione di codifica o decodifica.
+* Infine restituisce il risultato ottenuto sotto forma di tempo di esecuzione impiegato e, in caso di codifica, 
+* di fattore di compressione ottenuto.
+*
+*/
+
 int main(int argc, char* argv[])
 {
 	double tempo;
@@ -54,6 +78,4 @@ int main(int argc, char* argv[])
 	end = clock();
 	tempo = ((double)(end - start));
 	cout << "Tempo di esecuzione: " << tempo / 1000 << " s \n";
-
-
 }
