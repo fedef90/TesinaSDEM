@@ -1,21 +1,7 @@
-<<<<<<< HEAD
-﻿Compilazione avviata 03/12/2014 09:23:52.
+﻿Compilazione avviata 03/12/2014 09:51:17.
      1>Progetto "C:\Users\Marcy\Documents\GitHub\TesinaSDEM\LZ78\LZ78parallelo.vcxproj" sul nodo 2 (destinazioni: Build).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt LZ78Decode.cpp LZ78Encode.cpp main.cpp
-         LZ78Decode.cpp
-     1>LZ78Decode.cpp(15): warning C4244: '=': conversione da 'double' a 'unsigned int'. Possibile perdita di dati.
-     1>LZ78Decode.cpp(19): warning C4244: 'inizializzazione': conversione da 'double' a 'int'. Possibile perdita di dati.
-     1>LZ78Decode.cpp(37): warning C4018: '<': errata corrispondenza tra signed e unsigned
-     1>LZ78Decode.cpp(60): warning C4018: '<': errata corrispondenza tra signed e unsigned
-     1>LZ78Decode.cpp(62): warning C4554: '>>': controllare eventuali errori di precedenza tra gli operatori. Per maggiore chiarezza, utilizzare le parentesi.
-         LZ78Encode.cpp
-     1>c:\users\marcy\documents\github\tesinasdem\lz78\LZ78Encode.h(18): warning C4244: 'inizializzazione': conversione da 'double' a 'const unsigned int'. Possibile perdita di dati.
-=======
-﻿Compilazione avviata 03/12/2014 09:36:06.
-     1>Progetto "D:\GITHUB\TesinaSDEM\LZ78\LZ78parallelo.vcxproj" sul nodo 2 (destinazioni: Build).
-     1>ClCompile:
-         D:\APPLICAZIONI\VisualStudio\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt LZ78Decode.cpp LZ78Encode.cpp main.cpp
          LZ78Decode.cpp
      1>LZ78Decode.cpp(22): warning C4244: '=': conversione da 'double' a 'unsigned int'. Possibile perdita di dati.
      1>LZ78Decode.cpp(26): warning C4244: 'inizializzazione': conversione da 'double' a 'int'. Possibile perdita di dati.
@@ -23,39 +9,23 @@
      1>LZ78Decode.cpp(67): warning C4018: '<': errata corrispondenza tra signed e unsigned
      1>LZ78Decode.cpp(69): warning C4554: '>>': controllare eventuali errori di precedenza tra gli operatori. Per maggiore chiarezza, utilizzare le parentesi.
          LZ78Encode.cpp
-     1>d:\github\tesinasdem\lz78\LZ78Encode.h(18): warning C4244: 'inizializzazione': conversione da 'double' a 'const unsigned int'. Possibile perdita di dati.
->>>>>>> origin/master
+     1>c:\users\marcy\documents\github\tesinasdem\lz78\LZ78Encode.h(18): warning C4244: 'inizializzazione': conversione da 'double' a 'const unsigned int'. Possibile perdita di dati.
      1>LZ78Encode.cpp(9): warning C4551: chiamata di funzione senza elenco di argomenti
      1>LZ78Encode.cpp(26): warning C4244: 'inizializzazione': conversione da 'double' a 'int'. Possibile perdita di dati.
      1>LZ78Encode.cpp(70): warning C4244: 'inizializzazione': conversione da 'double' a 'int'. Possibile perdita di dati.
      1>LZ78Encode.cpp(90): warning C4554: '<<': controllare eventuali errori di precedenza tra gli operatori. Per maggiore chiarezza, utilizzare le parentesi.
      1>LZ78Encode.cpp(112): warning C4018: '<': errata corrispondenza tra signed e unsigned
          main.cpp
-<<<<<<< HEAD
      1>c:\users\marcy\documents\github\tesinasdem\lz78\LZ78Encode.h(18): warning C4244: 'inizializzazione': conversione da 'double' a 'const unsigned int'. Possibile perdita di dati.
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Marcy\Documents\GitHub\TesinaSDEM\LZ78\Release\LZ78parallelo.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Marcy\Documents\GitHub\TesinaSDEM\LZ78\Release\LZ78parallelo.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Marcy\Documents\GitHub\TesinaSDEM\LZ78\Release\LZ78parallelo.lib" /MACHINE:X86 /SAFESEH Release\LZ78Decode.obj
-=======
-     1>d:\github\tesinasdem\lz78\LZ78Encode.h(18): warning C4244: 'inizializzazione': conversione da 'double' a 'const unsigned int'. Possibile perdita di dati.
-       Link:
-         D:\APPLICAZIONI\VisualStudio\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\GITHUB\TesinaSDEM\LZ78\Release\LZ78parallelo.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\GITHUB\TesinaSDEM\LZ78\Release\LZ78parallelo.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\GITHUB\TesinaSDEM\LZ78\Release\LZ78parallelo.lib" /MACHINE:X86 /SAFESEH Release\LZ78Decode.obj
->>>>>>> origin/master
          Release\LZ78Encode.obj
          Release\main.obj
          Generazione codice in corso...
          Generazione codice terminata
-<<<<<<< HEAD
          LZ78parallelo.vcxproj -> C:\Users\Marcy\Documents\GitHub\TesinaSDEM\LZ78\Release\LZ78parallelo.exe
      1>Compilazione progetto "C:\Users\Marcy\Documents\GitHub\TesinaSDEM\LZ78\LZ78parallelo.vcxproj" (destinazioni: Build) completata.
 
 Compilazione completata.
 
-Tempo trascorso 00:00:10.23
-=======
-         LZ78parallelo.vcxproj -> D:\GITHUB\TesinaSDEM\LZ78\Release\LZ78parallelo.exe
-     1>Compilazione progetto "D:\GITHUB\TesinaSDEM\LZ78\LZ78parallelo.vcxproj" (destinazioni: Build) completata.
-
-Compilazione completata.
-
-Tempo trascorso 00:00:06.35
->>>>>>> origin/master
+Tempo trascorso 00:00:06.11

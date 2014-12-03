@@ -65,12 +65,4 @@ int main(int argc, char* argv[])
 	cout << "Tempo di esecuzione: " << tempo / 1000 << " s \n";
 
 
-	
-
-	
-	
-	
-
-
-
 }
