@@ -32,7 +32,7 @@ public:
 	LZ78Decode():byte(0),conta(8){}
 
 	//decodifica LZ78
-	int Decode(istream& in, ostream& out);
+	int Decode(string input, string output);
 
 	~LZ78Decode(){};
 

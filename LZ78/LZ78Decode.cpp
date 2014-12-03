@@ -1,7 +1,18 @@
 #include "LZ78Decode.h"
 
-int LZ78Decode::Decode(istream& in, ostream& out)
+int LZ78Decode::Decode(string input, string output)
 {
+
+	//Apertura degli stream in lettura e scrittura
+	ifstream in(input, ios::binary);
+	if (!in){
+		cout << "Errore apertura file di input \n";
+		return EXIT_FAILURE;
+	}
+
+	//creazione stream di output
+	ofstream out(output, ios::binary);
+
 	//lettura dell'header
 	string header;
 	header.resize(4);

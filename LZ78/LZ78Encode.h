@@ -33,7 +33,7 @@ class LZ78Encode
 
 public:
 	LZ78Encode(unsigned bitmax) : maxbit(bitmax),byte(0),conta(8){}
-	void encode(istream& input, ostream& output);
+	int encode(string input, string output);
 	
 
 

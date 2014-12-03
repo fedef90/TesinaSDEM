@@ -30,19 +30,10 @@ int main(int argc, char* argv[])
 	string file_input = argv[2];
 	string file_output = argv[3];
 	
-	//Apertura degli stream in lettura e scrittura
-	ifstream in(file_input,ios::binary);
-	if (!in){
-		cout << "Errore apertura file di input \n";
-		return EXIT_FAILURE;
-	}
-
-	ofstream out(file_output, ios::binary);
-	
 	if (flag == "ENC"){
 		cout << "Encoding ...\n";
 		LZ78Encode comprimi(maxbits);
-		comprimi.encode(in, out);
+		comprimi.encode(file_input, file_output);
 
 		struct stat sstr1, sstr2;
 		int res1 = stat(argv[2], &sstr1);
@@ -57,7 +48,7 @@ int main(int argc, char* argv[])
 	if (flag == "DEC"){
 		cout << "Decoding ...\n";
 		LZ78Decode decomprimi;
-		decomprimi.Decode(in, out);
+		decomprimi.Decode(file_input, file_output);
 	}
 
 	end = clock();

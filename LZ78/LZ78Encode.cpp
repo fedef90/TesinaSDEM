@@ -2,12 +2,17 @@
 
 
 //codifica LZ78
-void LZ78Encode::encode(istream& in, ostream& out)
+int LZ78Encode::encode(string input, string output)
 {
+	//Apertura degli stream in lettura e scrittura
+	ifstream in(input, ios::binary);
 	if (!in){
-		cout << "errore apertura file" << endl;
-		exit;
+		cout << "Errore apertura file di input \n";
+		return EXIT_FAILURE;
 	}
+
+	//creazione stream di output
+	ofstream out(output, ios::binary);
 
 	//scrittura header
 	out << "LZ78";
@@ -74,7 +79,8 @@ void LZ78Encode::encode(istream& in, ostream& out)
 	}
 	if (conta != 0)
 		out.put(byte);
-	
+
+	return EXIT_SUCCESS;
 }
 
 /**
