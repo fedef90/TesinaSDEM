@@ -8,8 +8,10 @@
 
 using namespace std;
 
-class LZ78Decode
-{
+/** Classe che realizza la decompressione di un file attraverso l'algoritmo LZ78.
+*
+*/
+class LZ78Decode{
 	//dizionario
 	vector<string> dictionary;
 
@@ -25,18 +27,18 @@ class LZ78Decode
 
 	//lettura dallo stream di in di n bit
 	unsigned bitreader(istream& in, unsigned n);
-	void CheckRead(istream& in);
+	void check_read(istream& in);
 
 public:
-	//costruttore
+	/** Costruttore della classe LZ78Decode.
+	*/
 	LZ78Decode():byte(0),conta(8){}
 
-	//decodifica LZ78
-	int Decode(string input, string output);
+	int decode(string input, string output);
 
+	/** Distruttore della classe LZ78Decode.
+	*/
 	~LZ78Decode(){};
-
-
 
 };
 

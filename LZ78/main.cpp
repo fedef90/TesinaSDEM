@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
 	if (flag == "DEC"){
 		cout << "Decoding ...\n";
 		LZ78Decode decomprimi;
-		decomprimi.Decode(file_input, file_output);
+		decomprimi.decode(file_input, file_output);
 	}
 
 	end = clock();
