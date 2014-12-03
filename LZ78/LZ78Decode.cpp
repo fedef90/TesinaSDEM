@@ -1,10 +1,17 @@
 #include "LZ78Decode.h"
 
-void LZ78Decode::Decode(istream& in, ostream& out)
+int LZ78Decode::Decode(istream& in, ostream& out)
 {
 	//lettura dell'header
-	char* header = new char[4];
-	in.read(header, 4);
+	string header;
+	header.resize(4);
+	in.read(reinterpret_cast<char*>(&header), 4);
+
+	if (header != "LZ78")
+	{
+		cout << "Header non valido" << endl;
+		return EXIT_FAILURE;
+	}
 
 	//lettura maxbit (5)
 	char c;
@@ -45,7 +52,7 @@ void LZ78Decode::Decode(istream& in, ostream& out)
 
 
 	}
-
+	return EXIT_SUCCESS;
 	
 
 
