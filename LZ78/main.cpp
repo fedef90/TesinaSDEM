@@ -5,57 +5,67 @@
 
 int main(int argc, char* argv[])
 {
-
 	double tempo;
 	clock_t start, end;
-
+	const unsigned maxbits = 10;
+	const unsigned numproc = 1;
 
 	start = clock();
 
 	if (argc != 4)
 	{
-		cout << "errore: numero argomenti passati sbagliati" << endl;
+		cout << "Numero di argomenti passati errato \n";
+		cout << "LZ78parallelo <ENC/DEC> <input filename> <output filename> \n";
 		return EXIT_FAILURE;
 	}
 
-	//controlli per il parametro maxbit
-	unsigned maxbit = atoi(argv[1]);
-
-	if (maxbit < 1 || maxbit > 31)
-	{
-		cout << "errore nell'inserimento dell'argomento maxbit" << endl;
+	//Controllo per il flag di codifica o decodifica
+	string flag = argv[1];
+	if (flag != "ENC" && flag != "DEC"){
+		cout << "Il primo argomento deve essere ENC (per la codifica) o DEC (per la decodifica) \n";
 		return EXIT_FAILURE;
 	}
 
-	//memorizzo nome file input e output per la codifica
+	//Memorizzazione nome file input e output per la codifica
 	string file_input = argv[2];
 	string file_output = argv[3];
 	
-	//apro gli stream in lettura e scrittura
+	//Apertura degli stream in lettura e scrittura
 	ifstream in(file_input,ios::binary);
 	if (!in){
-		cout << "errore apertura file" << endl;
+		cout << "Errore apertura file di input \n";
 		return EXIT_FAILURE;
 	}
+
 	ofstream out(file_output, ios::binary);
 	
-	LZ78Encode comprimi(maxbit);
-	comprimi.encode(in, out);
+	if (flag == "ENC"){
+		cout << "Encoding ...\n";
+		LZ78Encode comprimi(maxbits);
+		comprimi.encode(in, out);
 
-	in.close();
-	out.close();
+		struct stat sstr1, sstr2;
+		int res1 = stat(argv[2], &sstr1);
+		int res2 = stat(argv[3], &sstr2);
+		double size1 = sstr1.st_size;
+		double size2 = sstr2.st_size;
+		double fat = size2 / size1;
+
+		cout << "Fattore di compressione: " << fat * 100 << "% \n\n";
+	}
+
+	if (flag == "DEC"){
+		cout << "Decoding ...\n";
+		LZ78Decode decomprimi;
+		decomprimi.Decode(in, out);
+	}
+
 	end = clock();
 	tempo = ((double)(end - start));
-	cout << "tempo codifica: " << tempo/1000 << endl;
+	cout << "Tempo di esecuzione: " << tempo / 1000 << " s \n";
 
-	cout << "inizia la decompressione..." << endl;
+
 	
-	ifstream input(file_output,ios::binary);
-	cout << "inserisci nome per il file output" << endl;
-	string s="test-bibbia.txt";
-	ofstream output(s,ios::binary);
-	LZ78Decode decomprimi;
-	decomprimi.Decode(input, output);
 
 	
 	
