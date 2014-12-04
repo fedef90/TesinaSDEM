@@ -2,6 +2,7 @@
 #include "LZ78Decode.h"
 #include <time.h>
 #include <sys/stat.h>
+#include <mpi.h>
 
 /**@mainpage <center> Compressore LZ78 Parallelo </center>
 *
@@ -29,6 +30,12 @@
 
 int main(int argc, char* argv[])
 {
+	int rank, size;
+	MPI_Init(&argc, &argv);
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+	MPI_Comm_rank(MPI_COMM_WORLD, &size);
+
+
 	double tempo;
 	clock_t start, end;
 	const unsigned maxbits = 8;
@@ -66,7 +73,7 @@ int main(int argc, char* argv[])
 		double size2 = sstr2.st_size;
 		double fat = size2 / size1;
 
-		cout << "Fattore di compressione: " << fat * 100 << "% \n\n";
+		cout << "Fattore di compressione proc: "<<rank<<" " << fat * 100 << "% \n\n";
 	}
 
 	if (flag == "DEC"){
@@ -77,5 +84,7 @@ int main(int argc, char* argv[])
 
 	end = clock();
 	tempo = ((double)(end - start));
-	cout << "Tempo di esecuzione: " << tempo / 1000 << " s \n";
-}
+	cout << "Tempo di esecuzione proc: "<<rank<<" " << tempo / 1000 << " s \n";
+
+	MPI_Finalize();
+}	  

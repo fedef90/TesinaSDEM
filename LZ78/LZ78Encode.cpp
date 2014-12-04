@@ -1,4 +1,5 @@
 #include "LZ78Encode.h"
+#include "mpi.h"
 
 /** Funzione di codifica.
 *
@@ -11,6 +12,16 @@
 * @param[in] output Stringa contentente il nome del file di output
 */
 int LZ78Encode::encode(string input, string output){
+
+	int rank, size;
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+	MPI_Comm_size(MPI_COMM_WORLD, &size);
+	MPI_File out;
+	MPI_Status status;
+
+
+	//output.append(to_string(rank));
+
 	//Apertura degli stream in lettura e scrittura
 	ifstream in(input, ios::binary);
 	if (!in){
@@ -19,26 +30,47 @@ int LZ78Encode::encode(string input, string output){
 	}
 
 	//creazione stream di output
-	ofstream out(output, ios::binary);
+	//ofstream out(output, ios::binary);
+	MPI_File_open(MPI_COMM_WORLD, "out.dat", MPI_MODE_CREATE | MPI_MODE_WRONLY, MPI_INFO_NULL, &out);
+
 
 	//scrittura header
-	out << "LZ78";
-	
+	//out << "LZ78";
+
+	/*if (rank == 0){
+	MPI_File_seek(out, 0, MPI_SEEK_SET);
+	MPI_File_write(out, "LZ78", 4, MPI_CHAR, &status);
+	MPI_File_write(out, size, 1, MPI_INT, &status);
+	}*/
+
 	//scrittura dei 5 bit che indicano maxbits
-	bitwriter(maxbit, 5, out);
-	
+	//bitwriter(maxbit, 5, out);
+
+	unsigned f_end = 0, offset = 0, offset_w = rank, p = 0;
+	in.seekg(in.end);
+	f_end = in.tellg();
+	offset = (int)(f_end / size); //quantità di byte che ogni PE deve leggere
+
+	in.seekg(rank*offset);
+
+	if (rank == size - 1){
+		offset = offset + (f_end - (rank*offset));
+	}
+
 	char c;
 	string s;
-	int last_position=0; //ultima posizione trovata nel dizionario
-	while (in.get(c)){
+	int last_position = 0; //ultima posizione trovata nel dizionario
+	// while (in.get(c)){
+	while (p<offset){
+		in.get(c); p++;
 		if (dictionary.size() >= max_size)
 			dictionary.clear();
 		//numero bit da scrivere per la codifica della posizione
 		int bitpos = ceil(log2(dictionary.size() + 1));
-		
+
 		//controllo se il carattere è presente nel dizionario
 		s.push_back(c);
-		
+
 		int pos = check_dictionary(s, last_position);
 
 		if (pos == -1){
@@ -47,7 +79,7 @@ int LZ78Encode::encode(string input, string output){
 				dictionary.push_back(s);
 			}
 			else{
-				bitwriter(last_position+1, bitpos, out);
+				bitwriter(last_position + 1, bitpos, out);
 				dictionary.push_back(s);
 			}
 			bitwriter(c, 8, out);
@@ -57,35 +89,38 @@ int LZ78Encode::encode(string input, string output){
 		else{
 			//memorizzo la posizione della stringa che mi ha trovato
 			last_position = pos;
-		}		
+		}
 	}
 	if (dictionary.size() >= max_size)
 		dictionary.clear();
 	if (s.length() > 0){
 		s.pop_back();
 
-		int pos = check_dictionary(s,0);
+		int pos = check_dictionary(s, 0);
 
 		int bitpos = ceil(log2(dictionary.size() + 1));
 
-		bitwriter(pos+1, bitpos, out);
+		bitwriter(pos + 1, bitpos, out);
 		bitwriter(c, 8, out);
 	}
-	if (conta != 0)
-		out.put(byte);
+	if (conta != 0){
+		//out.put(byte);
+		MPI_File_write_at(out, offset_w, &byte, 8, MPI_CHAR, &status);
+		offset_w += size;
+	}
 
 	return EXIT_SUCCESS;
 }
 
 /** Funzione di scrittura a bit.
- * 
- * Scrittura di num bit di x sul file out chiamando la funzione scrivi_byte.
- *
- * @param[in] x Elemento che contiene i bit da scrivere sul file di output
- * @param[in] num Numero di bit di x che si scrivono sul file di output
- * @param[in] out Stream di output
+*
+* Scrittura di num bit di x sul file out chiamando la funzione scrivi_byte.
+*
+* @param[in] x Elemento che contiene i bit da scrivere sul file di output
+* @param[in] num Numero di bit di x che si scrivono sul file di output
+* @param[in] out Stream di output
 */
-void LZ78Encode::bitwriter(unsigned x, unsigned num, ostream& out){
+void LZ78Encode::bitwriter(unsigned x, unsigned num, MPI_File &out){
 	for (int i = num - 1; i >= 0; i--){
 		unsigned mask = x >> i;
 		mask = mask & 1;
@@ -100,9 +135,12 @@ void LZ78Encode::bitwriter(unsigned x, unsigned num, ostream& out){
 *
 * @param[in] out Stream di output
 */
-void LZ78Encode::scrivi_byte(ostream& out){
+void LZ78Encode::scrivi_byte(MPI_File & out, int size, int offset_w, MPI_Status status){
 	if (conta == 0){
-		out.put(byte);
+		//out.put(byte);
+		MPI_File_write_at(out, offset_w, &byte, 8, MPI_CHAR, &status);
+		offset_w += size;
+
 		conta = 8;
 		byte = 0;
 	}

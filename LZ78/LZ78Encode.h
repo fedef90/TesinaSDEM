@@ -24,10 +24,10 @@ class LZ78Encode{
 	unsigned conta; //contatore che mi indica quanti bit devo ancora inserire prima di scrivere su output
 
 	//scrittura di num bit di x
-	void bitwriter(unsigned x, unsigned num, ostream& out);
+	void bitwriter(unsigned x, unsigned num, MPI_File& out);
 
 	//controlla se è necessario scrivere il byte in output
-	void scrivi_byte(ostream& out);
+	void scrivi_byte(MPI_File& out, int size, int offset_w, MPI_Status status);
 
 	//controlla se la stringa s è presente nel dizionario e ritorno la posizione
 	// -1 se non la trovo.
