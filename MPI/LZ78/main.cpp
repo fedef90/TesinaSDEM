@@ -4,6 +4,7 @@
 #include <sys/stat.h>
 
 
+
 /**@mainpage <center> Compressore LZ78 Parallelo </center>
 *
 * Questo programma implementa la compressione di un file attraverso l'algoritmo LZ78 e la relativa 
@@ -32,29 +33,36 @@ int main(int argc, char* argv[])
 {
 
 	int rank, size;
+	
 	MPI_Init(&argc, &argv);
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	MPI_Comm_size(MPI_COMM_WORLD, &size);
-	
-	
+
 		double tempo;
 		clock_t start, end;
-		const unsigned maxbits = 12;
+		const unsigned maxbits = 8;
 		const unsigned numproc = 1;
 
 		start = clock();
 
 		if (argc != 4)
 		{
-			cout << "Numero di argomenti passati errato \n";
-			cout << "LZ78parallelo <ENC/DEC> <input filename> <output filename> \n";
+			if (rank == 0){
+				cout << "Numero di argomenti passati errato \n";
+				cout << "LZ78parallelo <ENC/DEC> <input filename> <output filename> \n";
+			}
+			MPI_Finalize();
 			return EXIT_FAILURE;
+			
 		}
 
 		//Controllo per il flag di codifica o decodifica
 		string flag = argv[1];
 		if (flag != "ENC" && flag != "DEC"){
-			cout << "Il primo argomento deve essere ENC (per la codifica) o DEC (per la decodifica) \n";
+			if (rank == 0){
+				cout << "Il primo argomento deve essere ENC (per la codifica) o DEC (per la decodifica) \n";
+			}
+			MPI_Finalize();
 			return EXIT_FAILURE;
 		}
 

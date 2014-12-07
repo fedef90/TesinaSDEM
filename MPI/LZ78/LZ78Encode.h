@@ -1,8 +1,15 @@
 #ifndef LZ78ENCODE
 #define LZ78ENCODE
 
-#include <vector>
+/*
+#include <mpi.hpp>
+#include <mpi/environment.hpp>
+#include <mpi/communicator.hpp>
+namespace mpi = boost::mpi;
+*/
+
 #include <iostream>
+#include <vector>
 #include <fstream>
 #include <string>
 #include <mpi.h>
@@ -11,7 +18,7 @@ using namespace std;
 
 /** Classe che realizza la compressione di un file attraverso l'algoritmo LZ78.
 *
-*@param[in] maxbits Numero massimo di bits utilizzati per stabilire la dimensione del dizionario in fase di codifica
+*@param[in] maxbits Numero m./assimo di bits utilizzati per stabilire la dimensione del dizionario in fase di codifica
 */
 class LZ78Encode{
 	//dizionario
@@ -25,15 +32,16 @@ class LZ78Encode{
 	unsigned conta; //contatore che mi indica quanti bit devo ancora inserire prima di scrivere su output
 
 	int rank, size, offset_w;
-	MPI_File out;
+	MPI_File out_m;
+	MPI_File in_m;
 	MPI_Status status;
 	MPI_Request *req;
 
 	//scrittura di num bit di x
-	void bitwriter(unsigned x, unsigned num, MPI_File & out);
+	void bitwriter(unsigned x, unsigned num, vector<unsigned char> & file_out);
 
 	//controlla se è necessario scrivere il byte in output
-	void scrivi_byte(MPI_File & out);
+	void scrivi_byte(vector<unsigned char> & file_out);
 
 	//controlla se la stringa s è presente nel dizionario e ritorno la posizione
 	// -1 se non la trovo.
