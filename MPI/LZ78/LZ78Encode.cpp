@@ -39,7 +39,7 @@ int LZ78Encode::encode(string input, string output){
 			//scrittura header
 			out << "LZ78";
 			//out.put(size);
-			out.write(reinterpret_cast<char*>(&size), sizeof(int));
+			out.write(reinterpret_cast<char*>(&size), 1);
 			//scrittura dei 5 bit che indicano maxbits
 			bitwriter(maxbit, 5, file_out);
 		}
