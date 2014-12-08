@@ -38,7 +38,8 @@ int LZ78Encode::encode(string input, string output){
 		if (rank == 0){
 			//scrittura header
 			out << "LZ78";
-			out.put(size);
+			//out.put(size);
+			out.write(reinterpret_cast<char*>(&size), sizeof(int));
 			//scrittura dei 5 bit che indicano maxbits
 			bitwriter(maxbit, 5, file_out);
 		}
@@ -143,7 +144,9 @@ int LZ78Encode::encode(string input, string output){
 		}
 
 		if (rank == 0){
-			out.put(dim_s);
+			//out.put(dim_s);
+			out.write(reinterpret_cast<char*>(&dim_s), sizeof(unsigned));
+
 			for (unsigned j = 0; j < file_out.size(); j++){
 				out << noskipws << file_out[j];
 			}
@@ -158,7 +161,8 @@ int LZ78Encode::encode(string input, string output){
 				MPI_Recv(&fout[0], dim_r, MPI_CHAR, i, i, MPI_COMM_WORLD, &status);
 				cout << "ho ricevuto fout\n";
 
-				out.put(dim_r);
+				//out.put(dim_r);
+				out.write(reinterpret_cast<char*>(&dim_r), sizeof(unsigned));
 				for (unsigned j = 0; j < fout.size(); j++){
 					out << noskipws << fout[j];
 				}
