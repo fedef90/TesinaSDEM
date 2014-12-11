@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <mpi.h>
 
 using namespace std;
 
@@ -12,6 +13,9 @@ using namespace std;
 *
 */
 class LZ78Decode{
+	//variabili mpi, id-proc e nproc
+	int rank, size;
+
 	//dizionario
 	vector<string> dictionary;
 

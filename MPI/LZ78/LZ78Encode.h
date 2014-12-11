@@ -31,11 +31,9 @@ class LZ78Encode{
 	unsigned char byte; //byte in attesa di essere scritto in output
 	unsigned conta; //contatore che mi indica quanti bit devo ancora inserire prima di scrivere su output
 
-	int rank, size, offset_w;
-	MPI_File out_m;
-	MPI_File in_m;
+	//variabili mpi
+	int rank, size;
 	MPI_Status status;
-	MPI_Request *req;
 
 	//scrittura di num bit di x
 	void bitwriter(unsigned x, unsigned num, vector<unsigned char> & file_out);

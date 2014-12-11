@@ -8,6 +8,10 @@
 * @param[in] output Stringa contentente il nome del file di output
 */
 int LZ78Decode::decode(string input, string output){
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+	MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+
 	//Apertura degli stream in lettura e scrittura
 	ifstream in(input, ios::binary);
 	if (!in){
@@ -28,14 +32,55 @@ int LZ78Decode::decode(string input, string output){
 		return EXIT_FAILURE;
 	}
 
-	//lettura maxbit (5)
-	char c;
-	in.get(c);
-	byte = c;
 
-	maxbit = bitreader(in, 5);
+	//lettura maxbit (8)
+	char c;
+	//byte = c;
+	//in.get(c);
+
+	//maxbit = bitreader(in, 5);
+	in.read(reinterpret_cast<char*>(&maxbit), 1);
 	max_size = pow(2, maxbit);
+	cout << "maxbit " << maxbit << endl;
+
+	//lettura nproc
+	int nproc = 0;
+	in.read(reinterpret_cast<char *>(&nproc), 1);
+	cout << "nproc " << nproc << endl;
+	if (nproc < size){
+		cout << "numero di processi in decodifica deve essere <= a " << nproc << endl;
+		return EXIT_FAILURE;
+	}
+
+	
+	unsigned ndata = 0;
+	vector<unsigned char> data;
+	for (unsigned step = 0; step < nproc; step++){
+		in.read(reinterpret_cast<char*>(&ndata), sizeof(unsigned));
+		cout << "dati da leggere " << ndata << endl;
+		data.clear();
+		data.resize(ndata);
+		in.read(reinterpret_cast<char*>(data.data()), ndata);
+
+
+		//------PARTE DI DECODIFICA-----------//
+		
+
+
+
+	}
+
+
+	/*
+	ofstream off("asdf.dat", ios::binary);
+	for (unsigned h = 0; h < data.size(); h++){
+		off << noskipws<<data[h];
+	}
+	EXIT_SUCCESS;
+	*/
+
 	string s;
+
 	while (continua){
 		int bitpos = ceil(log2(dictionary.size() + 1)); //numero bit da leggere per la posizione
 		
