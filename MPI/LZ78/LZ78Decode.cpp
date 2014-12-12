@@ -65,6 +65,45 @@ int LZ78Decode::decode(string input, string output){
 
 		//------PARTE DI DECODIFICA-----------//
 		
+		string s;
+		unsigned indice_data = 0;
+		byte = data[indice_data];
+		indice_data = indice_data + 1;
+		//lettura del primo byte dei dati da leggere
+		//vector<unsigned char>::iterator tmp_it = data.begin();
+		//byte = *tmp_it;
+		//data.erase(tmp_it);
+
+
+		while (continua){
+			//cout << "indice data: " << indice_data << endl;
+			int bitpos = ceil(log2(dictionary.size() + 1)); //numero bit da leggere per la posizione
+
+			unsigned pos = bitreader(data, bitpos,indice_data);
+			unsigned char car = (unsigned char)bitreader(data, 8,indice_data);
+
+			if (continua == false)
+				break;
+
+			if (pos == 0){
+				out.put(car);
+				s.push_back(car);
+				dictionary.push_back(s);
+			}
+			else{
+				s = dictionary[pos - 1];
+				s.push_back(car);
+				for (int i = 0; i < s.length(); i++)
+					out.put(s[i]);
+				dictionary.push_back(s);
+			}
+			s.clear();
+			if (dictionary.size() >= max_size)
+				dictionary.clear();
+		}
+		return EXIT_SUCCESS;
+	}
+
 
 
 
@@ -79,7 +118,7 @@ int LZ78Decode::decode(string input, string output){
 	EXIT_SUCCESS;
 	*/
 
-	string s;
+	/*string s;
 
 	while (continua){
 		int bitpos = ceil(log2(dictionary.size() + 1)); //numero bit da leggere per la posizione
@@ -106,8 +145,8 @@ int LZ78Decode::decode(string input, string output){
 		if (dictionary.size() >= max_size)
 			dictionary.clear();
 	}
-	return EXIT_SUCCESS;
-}
+	return EXIT_SUCCESS;*/
+//}
 
 /** Funzione di lettura a bit.
 *
@@ -117,7 +156,7 @@ int LZ78Decode::decode(string input, string output){
 * @param[in] in Stream di input
 * @param[in] n Numero di bit da leggere
 */
-unsigned LZ78Decode::bitreader(istream& in, unsigned n){
+unsigned LZ78Decode::bitreader(vector<unsigned char> &data, unsigned n, unsigned& indice_data){
 	unsigned pos = n - 1;
 	unsigned buffer = 0;
 	for (int i = 0; i < n; i++){
@@ -127,7 +166,7 @@ unsigned LZ78Decode::bitreader(istream& in, unsigned n){
 		buffer = buffer | mask;
 		conta = conta - 1;
 		pos = pos - 1;
-		check_read(in);
+		check_read(data,indice_data);
 		if (continua == false)
 			break;
 	}
@@ -138,14 +177,21 @@ unsigned LZ78Decode::bitreader(istream& in, unsigned n){
 *
 * @param[in] in Stream di input
 */
-void LZ78Decode::check_read(istream& in){
+void LZ78Decode::check_read(vector<unsigned char> &data, unsigned &indice_data){
 	if (conta == 0){
 		char c;
-		if (in.get(c)){
-			byte = c;
+		if (indice_data<data.size()){
+			//vector<unsigned char>::iterator c = data.begin();
+			//byte = *c; //in byte inserisco il primo elemento del vettore data
+			byte = data[indice_data];
+			indice_data = indice_data + 1;
 			conta = 8;
+			//dopo aver memorizzato il contenuto del primo elemento in byte, lo cancello dall'array
+			//data.erase(c);
+			//cout << "dovrei aver cancellato.." << endl;
 		}
 		else{
+			cout << "sono entrata nell'else.. devo terminare" << endl;
 			continua = false;
 		}
 	}

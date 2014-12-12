@@ -30,8 +30,8 @@ class LZ78Decode{
 
 
 	//lettura dallo stream di in di n bit
-	unsigned bitreader(istream& in, unsigned n);
-	void check_read(istream& in);
+	unsigned bitreader(vector<unsigned char>& data, unsigned n, unsigned& indice_data);
+	void check_read(vector<unsigned char>& in, unsigned &indice_data);
 
 public:
 	/** Costruttore della classe LZ78Decode.
