@@ -15,12 +15,13 @@ int LZ78Decode::decode(string input, string output){
 	//Apertura degli stream in lettura e scrittura
 	ifstream in(input, ios::binary);
 	if (!in){
-		cout << "Errore apertura file di input \n";
+		if (rank == 0){
+			cout << "Errore apertura file di input \n";
+		}
 		return EXIT_FAILURE;
 	}
 
-	//creazione stream di output
-	ofstream out(output, ios::binary);
+
 
 	//lettura dell'header
 	string header;
@@ -28,7 +29,9 @@ int LZ78Decode::decode(string input, string output){
 	in.read(reinterpret_cast<char*>(&header), 4);
 
 	if (header != "LZ78"){
-		cout << "Header non valido" << endl;
+		if (rank == 0){
+			cout << "Header non valido" << endl;
+		}
 		return EXIT_FAILURE;
 	}
 
@@ -48,23 +51,64 @@ int LZ78Decode::decode(string input, string output){
 	in.read(reinterpret_cast<char *>(&nproc), 1);
 	cout << "nproc " << nproc << endl;
 	if (nproc < size){
-		cout << "numero di processi in decodifica deve essere <= a " << nproc << endl;
+		if (rank == 0){
+			cout << "numero di processi in decodifica deve essere <= a " << nproc << endl;
+		}
 		return EXIT_FAILURE;
 	}
 
-	
-	unsigned ndata = 0;
+
+	vector <unsigned char> file_out;
+	unsigned ndata = 0, seek = 0;
+	vector <unsigned> nxdata;
 	vector<unsigned char> data;
-	for (unsigned step = 0; step < nproc; step++){
-		in.read(reinterpret_cast<char*>(&ndata), sizeof(unsigned));
-		cout << "dati da leggere " << ndata << endl;
+
+
+	if (size > 1){
+
+		if (rank == 0){
+			
+			unsigned next = 0, ndata0 = 0;
+			short proc = 1;
+			in.read(reinterpret_cast<char*>(&ndata0), sizeof(unsigned));
+			seek = in.tellg();
+
+			next = in.tellg(); next += +ndata0;
+			in.seekg(next);
+
+			for (unsigned step = 1; step < nproc-1; step++){
+				in.read(reinterpret_cast<char*>(&ndata), sizeof(unsigned));
+				MPI_Send(&ndata, 1, MPI_UNSIGNED, proc, proc, MPI_COMM_WORLD);
+				MPI_Send(&next, 1, MPI_UNSIGNED, proc, proc * 100, MPI_COMM_WORLD);
+
+				next = in.tellg(); next += +ndata;
+				in.seekg(next);
+				
+				if (proc == size - 1){ proc = 0; }
+				else{ proc++; }
+
+			}
+
+			ndata = ndata0;
+
+		}
+
+		if (rank != 0){
+			MPI_Recv(&ndata, 1, MPI_UNSIGNED, 0, rank, MPI_COMM_WORLD, &status);
+			MPI_Recv(&seek, 1, MPI_UNSIGNED, 0, rank*100, MPI_COMM_WORLD, &status);
+		
+		}
+
+		in.clear();
+		in.seekg(in.beg);
+		in.seekg(seek);
+
 		data.clear();
 		data.resize(ndata);
 		in.read(reinterpret_cast<char*>(data.data()), ndata);
 
+		cout << "proc " << rank << "  letto" << endl;
 
-		//------PARTE DI DECODIFICA-----------//
-		
 		string s;
 		unsigned indice_data = 0;
 		dictionary.clear();
@@ -82,14 +126,15 @@ int LZ78Decode::decode(string input, string output){
 			//cout << "indice data: " << indice_data << endl;
 			int bitpos = ceil(log2(dictionary.size() + 1)); //numero bit da leggere per la posizione
 
-			unsigned pos = bitreader(data, bitpos,indice_data);
-			unsigned char car = (unsigned char)bitreader(data, 8,indice_data);
+			unsigned pos = bitreader(data, bitpos, indice_data);
+			unsigned char car = (unsigned char)bitreader(data, 8, indice_data);
 
 			if (continua == false)
 				break;
 
 			if (pos == 0){
-				out.put(car);
+				//out.put(car);
+				file_out.push_back(car);
 				s.push_back(car);
 				dictionary.push_back(s);
 			}
@@ -97,59 +142,114 @@ int LZ78Decode::decode(string input, string output){
 				s = dictionary[pos - 1];
 				s.push_back(car);
 				for (int i = 0; i < s.length(); i++)
-					out.put(s[i]);
+					//out.put(s[i]);
+					file_out.push_back(s[i]);
 				dictionary.push_back(s);
 			}
 			s.clear();
 			if (dictionary.size() >= max_size)
 				dictionary.clear();
 		}
-		//return EXIT_SUCCESS;
-	}
 
 
+		cout << "proc " << rank << "  chiamate" << endl;
 
+		if (rank != 0){
+			unsigned dim = file_out.size();
+			MPI_Send(&dim, 1, MPI_UNSIGNED, 0, rank*100, MPI_COMM_WORLD);
+			MPI_Send(&file_out[0], dim, MPI_UNSIGNED_CHAR, 0, rank , MPI_COMM_WORLD);
+		}
 
-	}
+		if (rank == 0){
+			ofstream out(output, ios::binary);
+			vector <unsigned char> fout;
+			out.write(reinterpret_cast<char*>(file_out.data()), file_out.size());
 
-
-	/*
-	ofstream off("asdf.dat", ios::binary);
-	for (unsigned h = 0; h < data.size(); h++){
-		off << noskipws<<data[h];
-	}
-	EXIT_SUCCESS;
-	*/
-
-	/*string s;
-
-	while (continua){
-		int bitpos = ceil(log2(dictionary.size() + 1)); //numero bit da leggere per la posizione
+			unsigned dim_r = 0;
+			for (short i = 1; i < size - 1; i++){
+				dim_r = 0;
+				MPI_Recv(&dim_r, 1, MPI_UNSIGNED, i, i * 100, MPI_COMM_WORLD, &status);
+				fout.clear();
+				fout.resize(dim_r);
+				MPI_Recv(&fout[0], dim_r, MPI_UNSIGNED_CHAR, i, i, MPI_COMM_WORLD, &status);
+				out.write(reinterpret_cast<char*>(fout.data()), fout.size());;
+			
+			}
 		
-		unsigned pos = bitreader(in, bitpos);
-		unsigned char car = (unsigned char) bitreader(in, 8);
-
-		if (continua == false)
-			break;
-
-		if (pos == 0){
-			out.put(car);
-			s.push_back(car);
-			dictionary.push_back(s);
 		}
-		else{
-			s = dictionary[pos - 1];
-			s.push_back(car);
-			for (int i = 0; i < s.length(); i++)
-				out.put(s[i]);
-			dictionary.push_back(s);
-		}
-		s.clear();
-		if (dictionary.size() >= max_size)
-			dictionary.clear();
+
 	}
-	return EXIT_SUCCESS;*/
-//}
+	else{
+		for (unsigned step = 0; step < nproc; step++){
+			in.read(reinterpret_cast<char*>(&ndata), sizeof(unsigned));
+			cout << "dati da leggere " << ndata << endl;
+			data.clear();
+			data.resize(ndata);
+			in.read(reinterpret_cast<char*>(data.data()), ndata);
+
+
+			//------PARTE DI DECODIFICA-----------//
+
+			string s;
+			unsigned indice_data = 0;
+			dictionary.clear();
+			conta = 8;
+			continua = true;
+			byte = data[indice_data];
+			indice_data = indice_data + 1;
+			//lettura del primo byte dei dati da leggere
+			//vector<unsigned char>::iterator tmp_it = data.begin();
+			//byte = *tmp_it;
+			//data.erase(tmp_it);
+
+
+			while (continua){
+				//cout << "indice data: " << indice_data << endl;
+				int bitpos = ceil(log2(dictionary.size() + 1)); //numero bit da leggere per la posizione
+
+				unsigned pos = bitreader(data, bitpos, indice_data);
+				unsigned char car = (unsigned char)bitreader(data, 8, indice_data);
+
+				if (continua == false)
+					break;
+
+				if (pos == 0){
+					//out.put(car);
+					file_out.push_back(car);
+					s.push_back(car);
+					dictionary.push_back(s);
+				}
+				else{
+					s = dictionary[pos - 1];
+					s.push_back(car);
+					for (int i = 0; i < s.length(); i++)
+						//out.put(s[i]);
+						file_out.push_back(s[i]);
+					dictionary.push_back(s);
+				}
+				s.clear();
+				if (dictionary.size() >= max_size)
+					dictionary.clear();
+			}
+			//return EXIT_SUCCESS
+		}
+	
+		//creazione stream di output
+		ofstream out(output, ios::binary);
+		out.write(reinterpret_cast<char*>(file_out.data()), file_out.size());
+	
+	
+	}
+
+
+
+
+}
+
+
+	
+
+
 
 /** Funzione di lettura a bit.
 *

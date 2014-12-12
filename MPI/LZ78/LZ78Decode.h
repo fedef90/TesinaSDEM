@@ -15,6 +15,7 @@ using namespace std;
 class LZ78Decode{
 	//variabili mpi, id-proc e nproc
 	int rank, size;
+	MPI_Status status;
 
 	//dizionario
 	vector<string> dictionary;

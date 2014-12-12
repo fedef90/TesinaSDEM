@@ -146,9 +146,9 @@ int LZ78Encode::encode(string input, string output){
 	if (size > 1){
 
 		if (rank != 0){
-			MPI_Send(&dim_s, 1, MPI_INT, 0, rank * 100, MPI_COMM_WORLD);
+			MPI_Send(&dim_s, 1, MPI_UNSIGNED, 0, rank * 100, MPI_COMM_WORLD);
 	//		cout << rank << " ho mandato dim_s che è " << dim_s << endl;
-			MPI_Send(&file_out[0], dim_s, MPI_CHAR, 0, rank, MPI_COMM_WORLD);
+			MPI_Send(&file_out[0], dim_s, MPI_UNSIGNED_CHAR, 0, rank, MPI_COMM_WORLD);
 	//		cout << rank << " ho mandato file_out "  << endl;
 		}
 
@@ -157,25 +157,29 @@ int LZ78Encode::encode(string input, string output){
 			cout << "dims " << dim_s << endl;
 			out.write(reinterpret_cast<char*>(&dim_s), sizeof(unsigned));
 
-			for (unsigned j = 0; j < file_out.size(); j++){
-				out << noskipws << file_out[j];
-			}
+			//for (unsigned j = 0; j < file_out.size(); j++){
+				//out << noskipws << file_out[j];
+
+				out.write(reinterpret_cast<char*>(file_out.data()), file_out.size());
+			//}
 			for (unsigned i = 1; i <= size - 1; i++){
 		//		cout << "sono 0 aspetto di ricevere\n";
 				dim_r = 0;
-				MPI_Recv(&dim_r, 1, MPI_INT, i, i*100, MPI_COMM_WORLD, &status);
+				MPI_Recv(&dim_r, 1, MPI_UNSIGNED, i, i*100, MPI_COMM_WORLD, &status);
 				cout << rank << " ho ricevuto dim_r che è " << dim_r << endl;
 				fout.clear();
 				fout.resize(dim_r);
 				cout << fout.size() << endl;
-				MPI_Recv(&fout[0], dim_r, MPI_CHAR, i, i, MPI_COMM_WORLD, &status);
+				MPI_Recv(&fout[0], dim_r, MPI_UNSIGNED_CHAR, i, i, MPI_COMM_WORLD, &status);
 				cout << "ho ricevuto fout\n";
 
 				//out.put(dim_r);
 				out.write(reinterpret_cast<char*>(&dim_r), sizeof(unsigned));
-				for (unsigned j = 0; j < fout.size(); j++){
-					out << noskipws << fout[j];
-				}
+			//	for (unsigned j = 0; j < fout.size(); j++){
+					//out << noskipws << fout[j]
+					out.write(reinterpret_cast<char*>(fout.data()), fout.size());;
+
+				//}
 				
 			}
 		}
