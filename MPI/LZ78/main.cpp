@@ -71,18 +71,20 @@ int main(int argc, char* argv[])
 		string file_output = argv[3];
 
 		if (flag == "ENC"){
-			cout << "Encoding ..."<<rank<<endl;
+			cout << "Encoding ... " << rank << endl;
 			LZ78Encode comprimi(maxbits);
 			comprimi.encode(file_input, file_output);
 
-			struct stat sstr1, sstr2;
-			int res1 = stat(argv[2], &sstr1);
-			int res2 = stat(argv[3], &sstr2);
-			double size1 = sstr1.st_size;
-			double size2 = sstr2.st_size;
-			double fat = size2 / size1;
+			if (rank == 0){
+				struct stat sstr1, sstr2;
+				int res1 = stat(argv[2], &sstr1);
+				int res2 = stat(argv[3], &sstr2);
+				double size1 = sstr1.st_size;
+				double size2 = sstr2.st_size;
+				double fat = size2 / size1;
 
-			cout << "Fattore di compressione proc "<<rank<<": " << fat * 100 << "% \n\n";
+				cout << "Fattore di compressione: " << fat * 100 << "% \n\n";
+			}
 		}
 
 		if (flag == "DEC"){

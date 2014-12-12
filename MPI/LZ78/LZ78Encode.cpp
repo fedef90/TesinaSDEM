@@ -50,7 +50,7 @@ int LZ78Encode::encode(string input, string output){
 		in.seekg(0,in.end);
 		f_end = in.tellg();
 		offset = (int)(f_end / size); //quantità di byte che ogni PE deve leggere
-		stop = (offset*rank)+offset;
+		stop = (offset*rank) + offset;
 		if ((rank == size - 1) && (rank>0)){
 			if ((f_end%size) != 0){
 				stop += f_end%size;
