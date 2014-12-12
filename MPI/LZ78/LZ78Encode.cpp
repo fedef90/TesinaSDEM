@@ -63,12 +63,19 @@ int LZ78Encode::encode(string input, string output){
 		in.seekg(in.beg);
 		in.seekg(offset);
 		unsigned char uc = 0;
-		while (offset<stop){
+
+	/*	while (offset<stop){
 			offset++;
 			in >> noskipws >> uc;
 			file.push_back(uc);
 		}
-		
+		*/
+
+		file.clear();
+		file.resize(stop - offset);
+		in.read(reinterpret_cast<char*>(file.data()),stop-offset);
+
+
 		cout << "proc " << rank << "  input grande " << file.size() << endl;
 
 		in.clear();
