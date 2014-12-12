@@ -67,6 +67,9 @@ int LZ78Decode::decode(string input, string output){
 		
 		string s;
 		unsigned indice_data = 0;
+		dictionary.clear();
+		conta = 8;
+		continua = true;
 		byte = data[indice_data];
 		indice_data = indice_data + 1;
 		//lettura del primo byte dei dati da leggere
@@ -101,7 +104,7 @@ int LZ78Decode::decode(string input, string output){
 			if (dictionary.size() >= max_size)
 				dictionary.clear();
 		}
-		return EXIT_SUCCESS;
+		//return EXIT_SUCCESS;
 	}
 
 

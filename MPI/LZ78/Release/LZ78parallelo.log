@@ -1,26 +1,26 @@
-﻿Compilazione avviata 11/12/2014 19:19:55.
-     1>Progetto "C:\Users\FEDE\Desktop\MPI\LZ78\LZ78parallelo.vcxproj" sul nodo 2 (destinazioni: Build).
+﻿Compilazione avviata 12/12/2014 09:42:36.
+     1>Progetto "C:\Users\Marcy\Desktop\LZ78\LZ78parallelo.vcxproj" sul nodo 2 (destinazioni: Build).
      1>ClCompile:
-         D:\APPLICAZIONI\VisualStudio\VC\bin\CL.exe /c /I"D:\Boost\Boost\include\boost-1_57\boost" /I"C:\Program Files (x86)\Microsoft SDKs\MPI\Include" /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt LZ78Decode.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Program Files (x86)\Microsoft SDKs\MPI\Include" /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt LZ78Decode.cpp
          LZ78Decode.cpp
      1>LZ78Decode.cpp(43): warning C4244: '=': conversione da 'double' a 'unsigned int'. Possibile perdita di dati.
      1>LZ78Decode.cpp(58): warning C4018: '<': errata corrispondenza tra signed e unsigned
-     1>LZ78Decode.cpp(80): warning C4244: 'inizializzazione': conversione da 'double' a 'int'. Possibile perdita di dati.
-     1>LZ78Decode.cpp(96): warning C4018: '<': errata corrispondenza tra signed e unsigned
+     1>LZ78Decode.cpp(83): warning C4244: 'inizializzazione': conversione da 'double' a 'int'. Possibile perdita di dati.
+     1>LZ78Decode.cpp(99): warning C4018: '<': errata corrispondenza tra signed e unsigned
      1>LZ78Decode.cpp(37): warning C4101: 'c': variabile locale senza riferimenti
-     1>LZ78Decode.cpp(162): warning C4018: '<': errata corrispondenza tra signed e unsigned
-     1>LZ78Decode.cpp(163): warning C4554: '>>': controllare eventuali errori di precedenza tra gli operatori. Per maggiore chiarezza, utilizzare le parentesi.
-     1>LZ78Decode.cpp(182): warning C4101: 'c': variabile locale senza riferimenti
+     1>LZ78Decode.cpp(165): warning C4018: '<': errata corrispondenza tra signed e unsigned
+     1>LZ78Decode.cpp(166): warning C4554: '>>': controllare eventuali errori di precedenza tra gli operatori. Per maggiore chiarezza, utilizzare le parentesi.
+     1>LZ78Decode.cpp(185): warning C4101: 'c': variabile locale senza riferimenti
        Link:
-         D:\APPLICAZIONI\VisualStudio\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\FEDE\Desktop\MPI\LZ78\Release\LZ78parallelo.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Program Files (x86)\Microsoft SDKs\MPI\Lib\x86" msmpi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\FEDE\Desktop\MPI\LZ78\Release\LZ78parallelo.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\FEDE\Desktop\MPI\LZ78\Release\LZ78parallelo.lib" /MACHINE:X86 /SAFESEH Release\LZ78Decode.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Marcy\Desktop\LZ78\Release\LZ78parallelo.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Program Files (x86)\Microsoft SDKs\MPI\Lib\x86" msmpi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Marcy\Desktop\LZ78\Release\LZ78parallelo.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Marcy\Desktop\LZ78\Release\LZ78parallelo.lib" /MACHINE:X86 /SAFESEH Release\LZ78Decode.obj
          Release\LZ78Encode.obj
          Release\main.obj
          Generazione codice in corso...
-     1>c:\users\fede\desktop\mpi\lz78\lz78decode.cpp(110): warning C4715: 'LZ78Decode::decode': non tutti i percorsi di controllo restituiscono un valore
+     1>c:\users\marcy\desktop\lz78\lz78decode.cpp(113): warning C4715: 'LZ78Decode::decode': non tutti i percorsi di controllo restituiscono un valore
          Generazione codice terminata
-         LZ78parallelo.vcxproj -> C:\Users\FEDE\Desktop\MPI\LZ78\Release\LZ78parallelo.exe
-     1>Compilazione progetto "C:\Users\FEDE\Desktop\MPI\LZ78\LZ78parallelo.vcxproj" (destinazioni: Build) completata.
+         LZ78parallelo.vcxproj -> C:\Users\Marcy\Desktop\LZ78\Release\LZ78parallelo.exe
+     1>Compilazione progetto "C:\Users\Marcy\Desktop\LZ78\LZ78parallelo.vcxproj" (destinazioni: Build) completata.
 
 Compilazione completata.
 
-Tempo trascorso 00:00:05.69
+Tempo trascorso 00:00:04.14
