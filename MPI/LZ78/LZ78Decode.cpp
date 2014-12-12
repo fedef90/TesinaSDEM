@@ -73,19 +73,33 @@ int LZ78Decode::decode(string input, string output){
 			in.read(reinterpret_cast<char*>(&ndata0), sizeof(unsigned));
 			seek = in.tellg();
 
-			next = in.tellg(); next += +ndata0;
+			next = in.tellg(); next += ndata0;
 			in.seekg(next);
+		//	cout << "processo " << rank << " leggo nddata==" << ndata0  << endl;
+		//	cout << "processo " << rank << " next====" << next << endl;
 
-			for (unsigned step = 1; step < nproc-1; step++){
+
+
+
+			for (unsigned step = 1; step < nproc; step++){
 				in.read(reinterpret_cast<char*>(&ndata), sizeof(unsigned));
-				MPI_Send(&ndata, 1, MPI_UNSIGNED, proc, proc, MPI_COMM_WORLD);
-				MPI_Send(&next, 1, MPI_UNSIGNED, proc, proc * 100, MPI_COMM_WORLD);
-
-				next = in.tellg(); next += +ndata;
-				in.seekg(next);
 				
-				if (proc == size - 1){ proc = 0; }
-				else{ proc++; }
+				MPI_Send(&ndata, 1, MPI_UNSIGNED, step, step, MPI_COMM_WORLD);
+			//	cout << "processo " << rank << " ho mandato nddata==" << ndata << " a " << proc << endl;
+
+				next = in.tellg();
+
+
+				MPI_Send(&next, 1, MPI_UNSIGNED, step, step * 100, MPI_COMM_WORLD);
+			//	cout << "processo " << rank << " ho mandato next==" << next << " a " << proc << endl;
+
+
+				next += ndata;
+				in.seekg(next);
+			//	cout << "nextdopo== " << next << endl;
+				
+			//	if (proc == size - 1){ proc = 1; }
+			//	else{ proc++; }
 
 			}
 
@@ -94,8 +108,11 @@ int LZ78Decode::decode(string input, string output){
 		}
 
 		if (rank != 0){
-			MPI_Recv(&ndata, 1, MPI_UNSIGNED, 0, rank, MPI_COMM_WORLD, &status);
+		//	cout << "processo " << rank << " aspetto ndata" << endl;
+			MPI_Recv(&ndata, 1, MPI_UNSIGNED,0, rank, MPI_COMM_WORLD, &status);
+		//	cout << "processo " << rank << " ricevo ndata" << endl;
 			MPI_Recv(&seek, 1, MPI_UNSIGNED, 0, rank*100, MPI_COMM_WORLD, &status);
+		//	cout << "processo " << rank << " ricevo seek" << endl;
 		
 		}
 
@@ -107,7 +124,7 @@ int LZ78Decode::decode(string input, string output){
 		data.resize(ndata);
 		in.read(reinterpret_cast<char*>(data.data()), ndata);
 
-		cout << "proc " << rank << "  letto" << endl;
+	//	cout << "proc " << rank << "  letto" << endl;
 
 		string s;
 		unsigned indice_data = 0;
@@ -152,27 +169,31 @@ int LZ78Decode::decode(string input, string output){
 		}
 
 
-		cout << "proc " << rank << "  chiamate" << endl;
+	//	cout << "proc " << rank << "  chiamate" << endl;
 
 		if (rank != 0){
 			unsigned dim = file_out.size();
+
 			MPI_Send(&dim, 1, MPI_UNSIGNED, 0, rank*100, MPI_COMM_WORLD);
 			MPI_Send(&file_out[0], dim, MPI_UNSIGNED_CHAR, 0, rank , MPI_COMM_WORLD);
+
+		//	cout << "processo " << rank << "mandato out" << endl;
 		}
 
 		if (rank == 0){
+			
 			ofstream out(output, ios::binary);
 			vector <unsigned char> fout;
 			out.write(reinterpret_cast<char*>(file_out.data()), file_out.size());
 
 			unsigned dim_r = 0;
-			for (short i = 1; i < size - 1; i++){
+			for (short i = 1; i < size ; i++){
 				dim_r = 0;
 				MPI_Recv(&dim_r, 1, MPI_UNSIGNED, i, i * 100, MPI_COMM_WORLD, &status);
 				fout.clear();
 				fout.resize(dim_r);
 				MPI_Recv(&fout[0], dim_r, MPI_UNSIGNED_CHAR, i, i, MPI_COMM_WORLD, &status);
-				out.write(reinterpret_cast<char*>(fout.data()), fout.size());;
+				out.write(reinterpret_cast<char*>(fout.data()), fout.size());
 			
 			}
 		
@@ -182,7 +203,7 @@ int LZ78Decode::decode(string input, string output){
 	else{
 		for (unsigned step = 0; step < nproc; step++){
 			in.read(reinterpret_cast<char*>(&ndata), sizeof(unsigned));
-			cout << "dati da leggere " << ndata << endl;
+		//	cout << "dati da leggere " << ndata << endl;
 			data.clear();
 			data.resize(ndata);
 			in.read(reinterpret_cast<char*>(data.data()), ndata);
