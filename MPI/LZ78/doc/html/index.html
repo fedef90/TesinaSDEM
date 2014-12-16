@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>Compressore LZ78 Parallelo: &lt;center&gt; Compressore LZ78 Parallelo &lt;/center&gt;</title>
+<title>LZ78 Parallelo: &lt;center&gt; Documentazione &lt;/center&gt;</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -22,7 +22,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
-   <div id="projectname">Compressore LZ78 Parallelo
+   <div id="projectname">LZ78 Parallelo
    </div>
   </td>
  </tr>
@@ -74,10 +74,41 @@ var searchBox = new SearchBox("searchBox", "search",false,'Cerca');
 
 <div class="header">
   <div class="headertitle">
-<div class="title"><center> Compressore LZ78 Parallelo </center> </div>  </div>
+<div class="title"><center> Documentazione </center> </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Questo programma implementa la compressione di un file attraverso l'algoritmo LZ78 e la relativa decompressione, parallelizzando il calcolo su pi&ugrave; processori.</p><dl class="section author"><dt>Autori</dt><dd>Marcella Cornia </dd>
+<div class="textblock"><p>Questo programma implementa la compressione di un file attraverso la codifica LZ78 e la relativa decompressione, parallelizzando il calcolo attraverso l'esecuzione di pi&ugrave; processi. <br />
+ </p>
+<p>Per l'esecuzione &egrave; necessario invocare il comando mpiexec da linea di comando indicando: </p><ul type="square">
+<li>
+"-n" e il numero di processi su cui parallelizzare la codifica o la decodifica  </li>
+<li>
+il nome del file eseguibile  </li>
+<li>
+"--help" per la guida  </li>
+<li>
+"--encode" per la codifica  </li>
+<li>
+"--decode" per la decodifica  </li>
+</ul>
+<p>In caso di <b>codifica</b>: </p><ul type="square">
+<li>
+"-i" e il nome del file da comprimere [obbligatorio]  </li>
+<li>
+"-o" e il nome del file compresso [opzionale]  </li>
+<li>
+- "-b" e il numero massimo di bit da utilizzare per salvare le posizioni e quindi anche per la dimensione massima del dizionario [opzionale, default = 8]  </li>
+</ul>
+<p>In caso di <b>decodifica</b>: </p><ul type="square">
+<li>
+"-i" e il nome del file da decomprimere [obbligatorio]  </li>
+<li>
+"-o" e il nome del file decompresso [opzionale]  </li>
+</ul>
+<p>Ad esempio per la compressione del file di input utilizzando 10 bit per la dimensione massima del dizionario e parallelizzando la codifica con 4 processi: <br />
+ mpiexec -n 4 LZ78parallelo &ndash;encode -b 10 -i nomefileinput -o nomefileoutput <br />
+ </p>
+<dl class="section author"><dt>Autori</dt><dd>Marcella Cornia </dd>
 <dd>
 Federica Fergnani </dd>
 <dd>
@@ -85,7 +116,7 @@ Riccardo Gasparini </dd></dl>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generato Mer 3 Dic 2014 10:55:28 per Compressore LZ78 Parallelo da &#160;<a href="http://www.doxygen.org/index.html">
+Generato Mar 16 Dic 2014 14:47:51 per LZ78 Parallelo da &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>

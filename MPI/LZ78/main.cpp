@@ -5,27 +5,40 @@
 
 
 
-/**@mainpage <center> Compressore LZ78 Parallelo </center>
-*
+/** @mainpage <center> Documentazione </center>
 * Questo programma implementa la compressione di un file attraverso la codifica LZ78 e la relativa
 * decompressione, parallelizzando il calcolo attraverso l'esecuzione di pi&ugrave; processi. \n
 *
-* Per l'esecuzione &egrave; necessario invocare il comando mpiexec da linea di comando indicando: \n
-* - "-n" e il numero di processi su cui parallelizzare la codifica o la decodifica
-* - il nome del file eseguibile
-* - "--help" per la guida
-* - "--encode" per la codifica
-* - "--decode" per la decodifica
-* In caso di codifica: \n
-* - "-i" e il nome del file da comprimere [obbligatorio]
-* - "-o" e il nome del file compresso [opzionale]
-* - "-b" e il numero massimo di bit da utilizzare per salvare le posizioni e quindi anche per la dimensione massima del dizionario [opzionale, default = 8]
-* In caso di decodifica: \n
-* - "-i" e il nome del file da decomprimere [obbligatorio]
-* - "-o" e il nome del file decompresso [opzionale]
+* <p align = "left">
+* Per l'esecuzione &egrave; necessario invocare il comando mpiexec da linea di comando indicando:
+* <ul type = "square">
+* <li> "-n" e il numero di processi su cui parallelizzare la codifica o la decodifica </li>
+* <li> il nome del file eseguibile </li>
+* <li> "--help" per la guida </li>
+* <li> "--encode" per la codifica </li>
+* <li> "--decode" per la decodifica </li>
+* </ul> </p>
+*
+* <p align = "left">
+* In caso di <B>codifica</B>:
+* <ul type = "square">
+* <li> "-i" e il nome del file da comprimere [obbligatorio] </li>
+* <li> "-o" e il nome del file compresso [opzionale] </li>
+* <li> - "-b" e il numero massimo di bit da utilizzare per salvare le posizioni e quindi anche per la dimensione massima 
+* del dizionario [opzionale, default = 8] </li>
+* </ul> </p>
+*
+* <p align = "left">
+* In caso di <B>decodifica</B>: 
+* <ul type = "square">
+* <li> "-i" e il nome del file da decomprimere [obbligatorio] </li>
+* <li> "-o" e il nome del file decompresso [opzionale] </li>
+* </ul> </p>
+*
+* <p align = "left">
 * Ad esempio per la compressione del file di input utilizzando 10 bit per la dimensione massima del dizionario e parallelizzando
-* la codifica con 4 processi: \n
-* mpiexec -n 4 LZ78parallelo.exe --encode -b 10 -i nomefileinput -o nomefileoutput \n
+* la codifica con 4 processi: \n 
+* mpiexec -n 4 LZ78parallelo --encode -b 10 -i nomefileinput -o nomefileoutput \n </p>
 *
 *
 * @authors Marcella Cornia
@@ -62,8 +75,10 @@ int main(int argc, char* argv[]){
 		bool encode = false;
 		bool decode = false;
 		bool errore = true;
+		bool controllo = false;
 
 		start = clock();
+
 		unsigned i = 1;
 		while (i < argc){
 			string arg = argv[i];
@@ -71,15 +86,24 @@ int main(int argc, char* argv[]){
 				help = true;
 			}
 			if (arg == "--encode"){
+				if (encode){
+					controllo = true;
+				}
 				encode = true;
 			}
 			if (arg == "--decode"){
+				if (decode){
+					controllo = true;
+				}
 				decode = true;
 			}
 			if (arg == "-b"){
 				i++;
 				if (i < argc){
 					maxbits = atoi(argv[i]);
+					if (bit){
+						controllo = true;
+					}
 					bit = true;
 				}
 			}
@@ -87,6 +111,9 @@ int main(int argc, char* argv[]){
 				i++;
 				if (i < argc){
 					file_input = argv[i];
+					if (input){
+						controllo = true;
+					}
 					input = true;
 				}
 			}
@@ -94,6 +121,9 @@ int main(int argc, char* argv[]){
 				i++;
 				if (i < argc){
 					file_output = argv[i];
+					if (output){
+						controllo = true;
+					}
 					output = true;
 				}
 			}
@@ -116,13 +146,13 @@ int main(int argc, char* argv[]){
 			return EXIT_FAILURE;
 		}
 
-		if (encode && input && !decode && !help){
+		if (encode && input && !decode && !help && !controllo){
 			if (maxbits > 0 && maxbits < 32){
 				errore = false;
 			}
 		}
 
-		if (decode && input && !encode && !bit && !help){
+		if (decode && input && !encode && !bit && !help && !controllo){
 			errore = false;
 		}
 

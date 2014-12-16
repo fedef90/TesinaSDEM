@@ -1,23 +1,23 @@
-﻿Compilazione avviata 16/12/2014 12:42:50.
-     1>Progetto "D:\GITHUB\TesinaSDEM\MPI\LZ78\LZ78parallelo.vcxproj" sul nodo 2 (destinazioni: Build).
+﻿Compilazione avviata 16/12/2014 14:08:40.
+     1>Progetto "C:\Users\Marcy\Documents\GitHub\TesinaSDEM\MPI\LZ78\LZ78parallelo.vcxproj" sul nodo 2 (destinazioni: Build).
      1>ClCompile:
-         D:\APPLICAZIONI\VisualStudio\VC\bin\CL.exe /c /I"C:\Program Files (x86)\Microsoft SDKs\MPI\Include" /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Program Files (x86)\Microsoft SDKs\MPI\Include" /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
          main.cpp
-     1>d:\github\tesinasdem\mpi\lz78\LZ78Encode.h(28): warning C4244: 'inizializzazione': conversione da 'double' a 'const unsigned int'. Possibile perdita di dati.
-     1>main.cpp(65): warning C4018: '<': errata corrispondenza tra signed e unsigned
-     1>main.cpp(78): warning C4018: '<': errata corrispondenza tra signed e unsigned
-     1>main.cpp(85): warning C4018: '<': errata corrispondenza tra signed e unsigned
-     1>main.cpp(92): warning C4018: '<': errata corrispondenza tra signed e unsigned
+     1>c:\users\marcy\documents\github\tesinasdem\mpi\lz78\LZ78Encode.h(28): warning C4244: 'inizializzazione': conversione da 'double' a 'const unsigned int'. Possibile perdita di dati.
+     1>main.cpp(68): warning C4018: '<': errata corrispondenza tra signed e unsigned
+     1>main.cpp(87): warning C4018: '<': errata corrispondenza tra signed e unsigned
+     1>main.cpp(97): warning C4018: '<': errata corrispondenza tra signed e unsigned
+     1>main.cpp(107): warning C4018: '<': errata corrispondenza tra signed e unsigned
        Link:
-         D:\APPLICAZIONI\VisualStudio\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\GITHUB\TesinaSDEM\MPI\LZ78\Release\LZ78parallelo.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Program Files (x86)\Microsoft SDKs\MPI\Lib\x86" msmpi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\GITHUB\TesinaSDEM\MPI\LZ78\Release\LZ78parallelo.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\GITHUB\TesinaSDEM\MPI\LZ78\Release\LZ78parallelo.lib" /MACHINE:X86 /SAFESEH Release\LZ78Decode.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Marcy\Documents\GitHub\TesinaSDEM\MPI\LZ78\Release\LZ78parallelo.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Program Files (x86)\Microsoft SDKs\MPI\Lib\x86" msmpi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Marcy\Documents\GitHub\TesinaSDEM\MPI\LZ78\Release\LZ78parallelo.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Marcy\Documents\GitHub\TesinaSDEM\MPI\LZ78\Release\LZ78parallelo.lib" /MACHINE:X86 /SAFESEH Release\LZ78Decode.obj
          Release\LZ78Encode.obj
          Release\main.obj
          Generazione codice in corso...
-     1>d:\github\tesinasdem\mpi\lz78\lz78decode.cpp(268): warning C4715: 'LZ78Decode::decode': non tutti i percorsi di controllo restituiscono un valore
+     1>c:\users\marcy\documents\github\tesinasdem\mpi\lz78\lz78decode.cpp(268): warning C4715: 'LZ78Decode::decode': non tutti i percorsi di controllo restituiscono un valore
          Generazione codice terminata
-         LZ78parallelo.vcxproj -> D:\GITHUB\TesinaSDEM\MPI\LZ78\Release\LZ78parallelo.exe
-     1>Compilazione progetto "D:\GITHUB\TesinaSDEM\MPI\LZ78\LZ78parallelo.vcxproj" (destinazioni: Build) completata.
+         LZ78parallelo.vcxproj -> C:\Users\Marcy\Documents\GitHub\TesinaSDEM\MPI\LZ78\Release\LZ78parallelo.exe
+     1>Compilazione progetto "C:\Users\Marcy\Documents\GitHub\TesinaSDEM\MPI\LZ78\LZ78parallelo.vcxproj" (destinazioni: Build) completata.
 
 Compilazione completata.
 
-Tempo trascorso 00:00:02.90
+Tempo trascorso 00:00:03.77
