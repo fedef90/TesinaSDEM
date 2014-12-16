@@ -24,11 +24,12 @@ class LZ78Decode{
 	unsigned maxbit;
 	unsigned max_size;
 
-	//per la lettura
+	//per la lettura e la scrittura
 	unsigned conta;
 	unsigned char byte;
 	bool continua = true;
-
+	vector<unsigned char> data;
+	vector <unsigned char> file_out;
 
 	//lettura dallo stream di in di n bit
 	unsigned bitreader(vector<unsigned char>& data, unsigned n, unsigned& indice_data);
@@ -38,6 +39,8 @@ public:
 	/** Costruttore della classe LZ78Decode.
 	*/
 	LZ78Decode():byte(0),conta(8){}
+
+	void do_decode();
 
 	int decode(string input, string output);
 
