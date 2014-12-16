@@ -7,8 +7,26 @@
 
 /**@mainpage <center> Compressore LZ78 Parallelo </center>
 *
-* Questo programma implementa la compressione di un file attraverso l'algoritmo LZ78 e la relativa 
-* decompressione, parallelizzando il calcolo su pi&ugrave; processori.
+* Questo programma implementa la compressione di un file attraverso la codifica LZ78 e la relativa
+* decompressione, parallelizzando il calcolo attraverso l'esecuzione di pi&ugrave; processi. \n
+*
+* Per l'esecuzione &egrave; necessario invocare il comando mpiexec da linea di comando indicando: \n
+* - "-n" e il numero di processi su cui parallelizzare la codifica o la decodifica
+* - il nome del file eseguibile
+* - "--help" per la guida
+* - "--encode" per la codifica
+* - "--decode" per la decodifica
+* In caso di codifica: \n
+* - "-i" e il nome del file da comprimere [obbligatorio]
+* - "-o" e il nome del file compresso [opzionale]
+* - "-b" e il numero massimo di bit da utilizzare per salvare le posizioni e quindi anche per la dimensione massima del dizionario [opzionale, default = 8]
+* In caso di decodifica: \n
+* - "-i" e il nome del file da decomprimere [obbligatorio]
+* - "-o" e il nome del file decompresso [opzionale]
+* Ad esempio per la compressione del file di input utilizzando 10 bit per la dimensione massima del dizionario e parallelizzando
+* la codifica con 4 processi: \n
+* mpiexec -n 4 LZ78parallelo.exe --encode -b 10 -i nomefileinput -o nomefileoutput \n
+*
 *
 * @authors Marcella Cornia
 * @authors Federica Fergnani
@@ -17,89 +35,187 @@
 
 /** Funzione main.
 *
-* Gli argomenti passati da linea di comando devono essere:
-* - "ENC" o "DEC" rispettivamente per codifica e decodifica
-* - nome del file di input
-* - nome del file di output
-*
-* La funzione crea un oggetto della classe LZ78Encode o un oggetto della classe LZ78Decode a seconda  che il primo
-* argomento passato sia "ENC" o "DEC" e chiama la relativa funzione di codifica o decodifica.
-* Infine restituisce il risultato ottenuto sotto forma di tempo di esecuzione impiegato e, in caso di codifica, 
+* La funzione crea un oggetto della classe LZ78Encode o un oggetto della classe LZ78Decode 
+* e chiama la relativa funzione di codifica o decodifica.
+* Infine restituisce il risultato ottenuto sotto forma di tempo di esecuzione impiegato e, in caso di codifica,
 * di fattore di compressione ottenuto.
 *
 */
 
-int main(int argc, char* argv[])
-{
-
-	int rank, size;
+int main(int argc, char* argv[]){
+		int rank, size;
 	
-	MPI_Init(&argc, &argv);
-	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-	MPI_Comm_size(MPI_COMM_WORLD, &size);
+		MPI_Init(&argc, &argv);
+		MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+		MPI_Comm_size(MPI_COMM_WORLD, &size);
 
 		double tempo;
 		clock_t start, end;
-		const unsigned maxbits = 8;
-		const unsigned numproc = 1;
+		unsigned maxbits = 8;
+		string file_input;
+		string file_output;
+
+		bool help = false;
+		bool bit = false;
+		bool input = false;
+		bool output = false;
+		bool encode = false;
+		bool decode = false;
+		bool errore = true;
 
 		start = clock();
-
-		if (argc != 4)
-		{
+		unsigned i = 1;
+		while (i < argc){
+			string arg = argv[i];
+			if (arg =="--help"){
+				help = true;
+			}
+			if (arg == "--encode"){
+				encode = true;
+			}
+			if (arg == "--decode"){
+				decode = true;
+			}
+			if (arg == "-b"){
+				i++;
+				if (i < argc){
+					maxbits = atoi(argv[i]);
+					bit = true;
+				}
+			}
+			if (arg == "-i"){
+				i++;
+				if (i < argc){
+					file_input = argv[i];
+					input = true;
+				}
+			}
+			if (arg == "-o"){
+				i++;
+				if (i < argc){
+					file_output = argv[i];
+					output = true;
+				}
+			}
+			i++;
+		}
+		
+		if (help && (argc==2)){
+			errore = false;
 			if (rank == 0){
-				cout << "Numero di argomenti passati errato \n";
-				cout << "LZ78parallelo <ENC/DEC> <input filename> <output filename> \n";
+				cout << "HELP LZ78parallelo \n \n";
+				cout << "Per comprimere il file con la codifica LZ78: \n";
+				cout << "LZ78parallelo --encode -i <nome file input> [-b <numero bit>] [-o <nome file output>] \n \n";
+				cout << "Per decomprimere il file con la decodifica LZ78: \n";
+				cout << "LZ78parallelo --decode -i <nome file input> [-o <nome file output>] \n \n";
+				cout << "\t -i \t nome del file da comprimere/decomprimere \n";
+				cout << "\t -o \t nome del file compresso/decompresso \n";
+				cout << "\t -b \t numero di bit per la dimensione massima del dizionario (da specificare solo in caso di codifica) \n";
 			}
 			MPI_Finalize();
 			return EXIT_FAILURE;
-			
 		}
 
-		//Controllo per il flag di codifica o decodifica
-		string flag = argv[1];
-		if (flag != "ENC" && flag != "DEC"){
+		if (encode && input && !decode && !help){
+			if (maxbits > 0 && maxbits < 32){
+				errore = false;
+			}
+		}
+
+		if (decode && input && !encode && !bit && !help){
+			errore = false;
+		}
+
+		if (errore){
 			if (rank == 0){
-				cout << "Il primo argomento deve essere ENC (per la codifica) o DEC (per la decodifica) \n";
+				cout << "Errore! Consulta la guida con: LZ78parallelo --help \n";
 			}
 			MPI_Finalize();
 			return EXIT_FAILURE;
 		}
 
-		//Memorizzazione nome file input e output per la codifica
-		string file_input = argv[2];
-		string file_output = argv[3];
-
-		if (flag == "ENC"){
+		if (encode){
 			cout << "Encoding ... " << rank << endl;
 			LZ78Encode comprimi(maxbits);
+			if (!output){
+				file_output = file_input;
+				unsigned found = file_output.find_last_of(".");
+				file_output.replace(found + 1, 4, "lz78");
+			}
+			if (output){
+				int found = -1;
+				found = file_output.find_last_of(".");
+				if (found == -1){
+					file_output = file_output + ".lz78";
+				}
+				else{
+					file_output.replace(found + 1, file_output.length() - found + 1, "lz78");
+				}
+			}
+
 			comprimi.encode(file_input, file_output);
 
 			if (rank == 0){
 				struct stat sstr1, sstr2;
-				int res1 = stat(argv[2], &sstr1);
-				int res2 = stat(argv[3], &sstr2);
+				int res1 = stat((char *)&file_input, &sstr1);
+				int res2 = stat((char *)&file_output, &sstr2);
 				double size1 = sstr1.st_size;
 				double size2 = sstr2.st_size;
 				double fat = size2 / size1;
 
+				cout << "E' stato creato il file compresso " << file_output << "\n";
 				cout << "Fattore di compressione: " << fat * 100 << "% \n\n";
 			}
 		}
 
-		if (flag == "DEC"){
+		if (decode){
 			cout << "Decoding ...\n";
+
+			ifstream in(file_input, ios::binary);
+			if (!in){
+				if (rank == 0){
+					cout << "File di input non trovato \n";
+				}
+				MPI_Finalize();
+				return EXIT_FAILURE;
+			}
+			string header;
+			header.resize(4);
+			in.read(reinterpret_cast<char*>(&header), 4);
+			char dim_est;
+			in.get(dim_est);
+			string estensione;
+			estensione.resize(dim_est);
+			in.read(reinterpret_cast<char*>(&estensione), dim_est);
+			in.close();
+
+			if (!output){
+				file_output = file_input;
+				unsigned found = file_output.find_last_of(".");
+				file_output.replace(found, file_output.length() - found + 1, "-dec." + estensione);
+			}
+			if (output){
+				int found = -1;
+				found = file_output.find_last_of(".");
+				if (found == -1){
+					file_output = file_output + "." + estensione;
+				}
+				else{
+					file_output.replace(found + 1, file_output.length() - found + 1, estensione);
+				}
+			}
 			LZ78Decode decomprimi;
 			decomprimi.decode(file_input, file_output);
+			if (rank == 0){
+				cout << "E' stato creato il file decompresso " << file_output << "\n";
+			}
 		}
-
-
-		//cout << "sono il processo " << rank << " " << "di" << " " << size << endl;
 
 		end = clock();
 		tempo = ((double)(end - start));
-		cout << "Tempo di esecuzione proc "<<rank<<": " << tempo / 1000 << " s \n";
+		if (rank == 0){
+			cout << "Tempo di esecuzione: " << tempo / 1000 << " s \n";
+		}
 
-		
 		MPI_Finalize();
 }

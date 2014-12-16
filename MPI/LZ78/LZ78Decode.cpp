@@ -274,11 +274,11 @@ int LZ78Decode::decode(string input, string output){
 
 /** Funzione di lettura a bit.
 *
-* Lettura di n bit dal file di input attraverso la funzione check_read che estrae i byte dal file quando
-* pi&egrave; necessario.
+* Lettura di n bit dal vettore di caratteri data attraverso la funzione check_read 
 *
-* @param[in] in Stream di input
+* @param[in] data Vettore di input
 * @param[in] n Numero di bit da leggere
+* @param[in] indice_data Indice del vettore data del byte di cui si stanno estraendo i bit
 */
 unsigned LZ78Decode::bitreader(vector<unsigned char> &data, unsigned n, unsigned& indice_data){
 	unsigned pos = n - 1;
@@ -297,9 +297,11 @@ unsigned LZ78Decode::bitreader(vector<unsigned char> &data, unsigned n, unsigned
 	return buffer;
 }
 
-/** Funzione di lettura dei byte dal file di input.
+/** Funzione di controllo per l'estrazione dei bit. Quando viene completata l'estrazione dell'intero byte 
+*corrente, viene letto il byte successivo dal vettore data
 *
-* @param[in] in Stream di input
+* @param[in] data Vettore di input
+* @param[in] indice_data Indice del vettore data del byte di cui si stanno estraendo i bit
 */
 void LZ78Decode::check_read(vector<unsigned char> &data, unsigned &indice_data){
 	if (conta == 0){

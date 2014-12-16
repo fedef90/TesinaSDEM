@@ -38,6 +38,11 @@ int LZ78Encode::encode(string input, string output){
 		if (rank == 0){
 			//scrittura header
 			out << "LZ78";
+			unsigned found = input.find_last_of(".");
+			string estensione = input.substr(found + 1, input.length() - found + 1);
+			unsigned dim_est = estensione.length();
+			out.write(reinterpret_cast<char*>(&dim_est), 1);
+			out << estensione;
 			//out.put(size);
 			out.write(reinterpret_cast<char*>(&maxbit), 1);
 			out.write(reinterpret_cast<char*>(&size), 1);
